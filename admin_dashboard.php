@@ -24,7 +24,7 @@ $csrf = mapasaheCsrfToken();
 <a class="skip-link" href="#overview">Skip to dashboard</a>
 
 <aside class="sidebar">
-    <a class="brand" href="system1_3.php">MapaSahe <span>Admin</span></a>
+    <a class="brand" href="system1_4.php">MapaSahe <span>Admin</span></a>
 
     <nav class="sidebar__nav" aria-label="Dashboard sections">
         <a href="#overview">Overview</a>
@@ -38,7 +38,7 @@ $csrf = mapasaheCsrfToken();
 
     <div class="sidebar__foot">
         <p>Signed in as <strong><?= mapasaheEsc($user['username']) ?></strong></p>
-        <a class="pill-link" href="system1_3.php">Planner</a>
+        <a class="pill-link" href="system1_4.php">Planner</a>
         <a class="pill-link" href="user_dashboard.php">My dashboard</a>
         <form method="POST" action="logout.php">
             <input type="hidden" name="csrf_token" value="<?= mapasaheEsc($csrf) ?>">
