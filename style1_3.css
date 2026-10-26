@@ -755,3 +755,28 @@ button.auth-link { background: none; cursor: pointer; font-family: inherit; }
 .save-route .btn { min-height: 36px; font-size: var(--fs-sm); }
 .save-route--hint { font-size: var(--fs-sm); color: var(--muted); }
 .save-route--hint a { color: var(--brand); font-weight: 700; }
+
+
+/* No dot; colour the whole background instead */
+.model-strip li::before,
+.intro__list li::before {
+  display: none;
+}
+
+/* Header: each algorithm is a coloured pill */
+.model-strip li {
+  padding: 3px 10px;
+  background: color-mix(in srgb, var(--route-color) 22%, #fff);
+  border: 1.5px solid var(--route-color);
+  color: var(--ink);
+}
+
+/* "Three models, one route" list: each algorithm is a coloured box */
+.intro__list li {
+  margin-top: 6px;
+  padding: 8px 12px;
+  border-top: 0;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--route-color) 14%, #fff);
+  border-left: 4px solid var(--route-color);
+}

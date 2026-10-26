@@ -302,98 +302,6 @@
         });
     }
 
-    function renderEta(data) {
-        var k = data.kpis;
-        var box = clear($('eta-kpis'));
-        var slower = k.recent_avg_ms !== null && k.avg_ms !== null && k.recent_avg_ms > 1.5 * k.avg_ms;
-
-        box.appendChild(kpi('Average', ms(k.avg_ms)));
-        box.appendChild(kpi('Typical (median)', ms(k.median_ms)));
-        box.appendChild(kpi('Slow case (95th pct.)', ms(k.p95_ms)));
-        box.appendChild(kpi('Last 20 searches', ms(k.recent_avg_ms), slower ? 'slower than usual' : '', slower ? 'warn' : ''));
-        box.appendChild(kpi('Fastest / slowest', ms(k.fastest_ms) + ' / ' + ms(k.slowest_ms)));
-
-        drawTimeline(data.timeline, k.avg_ms);
-    }
-
-    /* One bar per recent search, in SVG so it scales with the card. */
-    function drawTimeline(points, average) {
-        var host = clear($('timeline'));
-
-        if (points.length === 0) {
-            host.appendChild(el('p', 'empty', 'No searches in this period yet.'));
-            return;
-        }
-
-        var NS = 'http://www.w3.org/2000/svg';
-        var width = 720;
-        var height = 180;
-        var pad = { top: 12, right: 8, bottom: 22, left: 44 };
-        var innerW = width - pad.left - pad.right;
-        var innerH = height - pad.top - pad.bottom;
-        var max = Math.max.apply(null, points.map(function (p) { return p.total_ms; }).concat([average || 0])) * 1.1 || 1;
-        var slot = innerW / points.length;
-        var barW = Math.max(2, Math.min(18, slot - 2));
-
-        function node(name, attrs) {
-            var n = document.createElementNS(NS, name);
-
-            Object.keys(attrs).forEach(function (key) { n.setAttribute(key, attrs[key]); });
-
-            return n;
-        }
-
-        function y(value) { return pad.top + innerH - innerH * value / max; }
-
-        var svg = node('svg', {
-            viewBox: '0 0 ' + width + ' ' + height,
-            role: 'img',
-            'aria-label': 'Processing time of the ' + points.length + ' most recent searches'
-        });
-
-        [0, 0.5, 1].forEach(function (step) {
-            var value = max * step;
-            var label = node('text', { x: pad.left - 6, y: y(value) + 4, 'text-anchor': 'end', class: 'tl-axis' });
-
-            label.textContent = step === 0 ? '0' : ms(value);
-            svg.appendChild(node('line', { x1: pad.left, x2: width - pad.right, y1: y(value), y2: y(value), class: 'tl-grid' }));
-            svg.appendChild(label);
-        });
-
-        points.forEach(function (point, index) {
-            var x = pad.left + index * slot + (slot - barW) / 2;
-            var bar = node('rect', {
-                x: x,
-                y: y(point.total_ms),
-                width: barW,
-                height: Math.max(1, pad.top + innerH - y(point.total_ms)),
-                rx: 2,
-                class: 'tl-bar' + (point.status !== 'ok' ? ' tl-bar--fail' : '')
-            });
-            var title = node('title', {});
-
-            title.textContent = when(point.at) + ' · ' + ms(point.total_ms) +
-                (point.status !== 'ok' ? ' · no route found' : '');
-            bar.appendChild(title);
-            svg.appendChild(bar);
-        });
-
-        if (average) {
-            svg.appendChild(node('line', {
-                x1: pad.left, x2: width - pad.right, y1: y(average), y2: y(average), class: 'tl-avg'
-            }));
-        }
-
-        var first = node('text', { x: pad.left, y: height - 6, class: 'tl-axis' });
-        var last = node('text', { x: width - pad.right, y: height - 6, 'text-anchor': 'end', class: 'tl-axis' });
-
-        first.textContent = when(points[0].at);
-        last.textContent = when(points[points.length - 1].at);
-        svg.appendChild(first);
-        svg.appendChild(last);
-        host.appendChild(svg);
-    }
-
     function renderPaths(data) {
         var body = clear($('paths-table').querySelector('tbody'));
         var max = data.paths.length ? data.paths[0].uses : 0;
@@ -561,7 +469,6 @@
             renderOverview(data);
             renderModels(data);
             renderCost(data);
-            renderEta(data);
             renderPaths(data);
             renderStops(data);
             fillTypeFilter(data.event_types);

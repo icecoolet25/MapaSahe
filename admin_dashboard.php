@@ -30,7 +30,6 @@ $csrf = mapasaheCsrfToken();
         <a href="#overview">Overview</a>
         <a href="#models">Model performance</a>
         <a href="#cost">Time complexity &amp; cost</a>
-        <a href="#eta">Processing time</a>
         <a href="#paths">Frequent paths</a>
         <a href="#stops">Stops</a>
         <a href="#history">History log</a>
@@ -139,24 +138,6 @@ $csrf = mapasaheCsrfToken();
                 <div id="stage-bar" class="stage-bar"></div>
                 <ul id="stage-legend" class="stage-legend"></ul>
             </div>
-        </div>
-    </section>
-
-    <!-- ETA / processing time -->
-    <section class="section" id="eta" aria-labelledby="eta-title">
-        <h2 class="section__title" id="eta-title">Processing time</h2>
-        <p class="section__note">
-            How long a search takes from request to result, measured on the server.
-        </p>
-
-        <div class="kpis kpis--small" id="eta-kpis"></div>
-
-        <div class="card">
-            <header class="card__head">
-                <h3>Most recent searches</h3>
-                <p class="card__hint">Oldest on the left. The dashed line is the period average.</p>
-            </header>
-            <div id="timeline" class="timeline"></div>
         </div>
     </section>
 
