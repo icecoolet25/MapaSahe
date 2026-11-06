@@ -12,5 +12,5 @@ if ($user !== null && $_SERVER['REQUEST_METHOD'] === 'POST' && mapasaheCheckCsrf
     session_destroy();
 }
 
-header('Location: system1_3.php');
+header('Location: system2_1.php');
 exit();

@@ -40,5 +40,5 @@ $_SESSION['role'] = $user['role'];
 
 mapasaheLogEvent('login', $user['username'] . ' logged in', (int) $user['id']);
 
-header('Location: ' . ($user['role'] === 'admin' ? 'admin_dashboard.php' : 'user_dashboard.php'));
+header('Location: ' . ($user['role'] === 'admin' ? 'admin_dashboard.php' : 'system2_1.php'));
 exit();
