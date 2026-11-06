@@ -41,11 +41,11 @@ if (isset($_GET['success']) && $_GET['success'] == 'registered') {
 </head>
 
 <body>
-    <iframe id="mainPage" src="system1_3.php" title="MapaSahe route planner" tabindex="-1" aria-hidden="true"></iframe>
+    <iframe id="mainPage" src="system2_1.php" title="MapaSahe route planner" tabindex="-1" aria-hidden="true"></iframe>
     <div class="overlay"></div>
 
     <div class="wrapper" id="registerForm">
-        <a href="system1_3.php" class="exit-btn" aria-label="Close and go back to the route planner"><i class='bx bx-x'></i></a>
+        <a href="system2_1.php" class="exit-btn" aria-label="Close and go back to the route planner"><i class='bx bx-x'></i></a>
 
         <form action="register_process.php" method="POST">
             <h1>Register</h1>

@@ -2,6 +2,12 @@
 require_once __DIR__ . '/auth.php';
 
 $user = mapasaheRequireLogin();
+
+// Admins only have the admin dashboard.
+if ($user['role'] === 'admin') {
+    header('Location: admin_dashboard.php');
+    exit();
+}
 $db = mapasaheDb();
 $csrf = mapasaheCsrfToken();
 
@@ -73,7 +79,7 @@ function niceDate(string $datetime): string
 /* A hidden form that re-runs a trip in the planner with one click. */
 function runTripForm(array $trip, string $label, string $class): void
 { ?>
-    <form method="POST" action="system1_3.php">
+    <form method="POST" action="system2_1.php">
         <input type="hidden" name="origin_node_id" value="<?= mapasaheEsc($trip['origin_node_id']) ?>">
         <input type="hidden" name="destination_node_id" value="<?= mapasaheEsc($trip['destination_node_id']) ?>">
         <button type="submit" class="<?= mapasaheEsc($class) ?>"><?= mapasaheEsc($label) ?></button>
@@ -100,13 +106,10 @@ $error = isset($_GET['error']) ? (string) $_GET['error'] : '';
 <body class="page page--user">
 
 <header class="topbar">
-    <a class="brand" href="system1_3.php">MapaSahe</a>
+    <a class="brand" href="system2_1.php">MapaSahe</a>
 
     <nav class="topbar__nav" aria-label="Account">
-        <?php if ($user['role'] === 'admin'): ?>
-            <a class="pill-link" href="admin_dashboard.php">Admin</a>
-        <?php endif; ?>
-        <a class="pill-link" href="system1_3.php">Planner</a>
+        <a class="pill-link" href="system2_1.php">Planner</a>
         <form method="POST" action="logout.php">
             <input type="hidden" name="csrf_token" value="<?= mapasaheEsc($csrf) ?>">
             <button type="submit" class="pill-link">Log out</button>
@@ -127,7 +130,7 @@ $error = isset($_GET['error']) ? (string) $_GET['error'] : '';
             </p>
         </div>
 
-        <a class="btn btn--light" href="system1_3.php">Plan a route</a>
+        <a class="btn btn--light" href="system2_1.php">Plan a route</a>
     </section>
 
     <?php if ($notice !== ''): ?>

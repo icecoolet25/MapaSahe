@@ -2886,6 +2886,27 @@ $cardContextV09 = [
             border: 3px solid var(--map-route, var(--brand));
             box-shadow: none;
         }
+                /* 2.1: map key opens and closes with a visible Hide / Show control */
+        #map-key summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            list-style: none;
+            cursor: pointer;
+            user-select: none;
+        }
+        #map-key summary::-webkit-details-marker { display: none; }
+        #map-key summary::after {
+            content: 'Hide \25B4';
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--brand);
+        }
+        #map-key:not([open]) summary::after { content: 'Show \25BE'; }
+        #map-key summary:hover::after { text-decoration: underline; }
+                                /* 2.1: hide the Dijkstra · A* · GBFS = Hybrid strip in the header */
+        .model-strip { display: none !important; }
     </style>
 </head>
 
@@ -2903,7 +2924,7 @@ $cardContextV09 = [
         <span class="brand__name">MapaSahe</span>
     </a>
 
-    <ul class="model-strip" aria-label="Search models used">
+        <ul class="model-strip" aria-label="Search models used">
         <?php foreach ($modelLabelsV09 as $labelV09): ?>
             <li style="--route-color: <?= eV08($routeColorsV08[$labelV09]) ?>;"><?= eV08($labelV09) ?></li>
         <?php endforeach; ?>
@@ -2915,12 +2936,13 @@ $cardContextV09 = [
             <a class="auth-link" href="loginMapa.php" target="_top">Log in</a>
             <a class="auth-link auth-link--solid" href="registerMapa.php" target="_top">Sign up</a>
         <?php else: ?>
-            <?php if ($currentUserV09['role'] === 'admin'): ?>
-                <a class="auth-link" href="admin_dashboard.php" target="_top">Admin</a>
+                        <?php if ($currentUserV09['role'] === 'admin'): ?>
+                <a class="auth-link auth-link--solid" href="admin_dashboard.php" target="_top">Admin</a>
+            <?php else: ?>
+                <a class="auth-link auth-link--solid" href="user_dashboard.php" target="_top">
+                    <?= eV08($currentUserV09['username']) ?>
+                </a>
             <?php endif; ?>
-            <a class="auth-link auth-link--solid" href="user_dashboard.php" target="_top">
-                <?= eV08($currentUserV09['username']) ?>
-            </a>
             <form method="POST" action="logout.php" target="_top" class="auth-form">
                 <input type="hidden" name="csrf_token" value="<?= eV08(mapasaheCsrfToken()) ?>">
                 <button type="submit" class="auth-link">Log out</button>
@@ -3061,7 +3083,9 @@ $cardContextV09 = [
                             <?= eV08($cardContextV09['destination']) ?>
                         </h2>
 
-                        <?php if ($currentUserV09 !== null): ?>
+                        <?php if ($currentUserV09 !== null && $currentUserV09['role'] === 'admin'): ?>
+                        <?php /* Admins have no saved trips. */ ?>
+                        <?php elseif ($currentUserV09 !== null): ?>
                             <form method="POST" action="user_actions.php" target="_top" class="save-route">
                                 <input type="hidden" name="csrf_token" value="<?= eV08(mapasaheCsrfToken()) ?>">
                                 <input type="hidden" name="action" value="save_route">
